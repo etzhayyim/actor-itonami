@@ -1,4 +1,4 @@
-(ns itonami.tests.test-analyze
+(ns itonami.tests.analyze-test
   "itonami 営み — operations-KPI analyzer tests (ADR-2606082300).
   1:1 Clojure port of tests/test_analyze.py.
 
@@ -23,7 +23,7 @@
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def actor-dir (io/file "."))
 (def seed (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 
 (defn load-seed [] (analyze/load-file* seed))

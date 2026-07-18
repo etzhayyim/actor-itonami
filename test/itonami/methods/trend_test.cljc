@@ -1,4 +1,4 @@
-(ns itonami.methods.test-trend
+(ns itonami.methods.trend-test
   "itonami 営み — R7 KPI trend / drift tests (ADR-2606082300).
   1:1 Clojure port of tests/test_trend.py (every assertion). load-history takes EDN text
   (I/O at the #?(:clj) edge), so the G2 worker-series rejection is exercised on text directly
@@ -8,7 +8,7 @@
             [clojure.java.io :as io]
             [itonami.methods.trend :as trend]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def actor-dir (io/file "."))
 (def hist (io/file actor-dir "data" "seed-ops-history.kotoba.edn"))
 
 (defn- load-history [] (trend/load-history (slurp hist)))

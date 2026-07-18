@@ -1,4 +1,4 @@
-(ns itonami.tests.test-digest
+(ns itonami.tests.digest-test
   "itonami 営み — R4 daily digest + Murakumo narration tests (ADR-2606082300).
   1:1 Clojure port of tests/test_digest.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
@@ -9,7 +9,7 @@
             [itonami.methods.trend :as trend]
             [itonami.methods.digest :as digest]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (io/file "."))
 (def ^:private ops (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 (def ^:private det (io/file actor-dir "data" "seed-vision-detections.kotoba.edn"))
 

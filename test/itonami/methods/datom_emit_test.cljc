@@ -1,4 +1,4 @@
-(ns itonami.methods.test-datom-emit
+(ns itonami.methods.datom-emit-test
   "itonami 営み — Datom-emit tests (ADR-2606082300).
   1:1 Clojure port of the three `datom_emit`-dependent assertions deferred out of
   test_analyze.py (the inochi/rasen precedent):
@@ -15,7 +15,7 @@
             [itonami.methods.analyze :as analyze]
             [itonami.methods.datom-emit :as datom-emit]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def actor-dir (io/file "."))
 (def seed (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 
 (defn load-seed [] (analyze/load-file* seed))

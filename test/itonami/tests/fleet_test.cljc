@@ -1,4 +1,4 @@
-(ns itonami.tests.test-fleet
+(ns itonami.tests.fleet-test
   "itonami 営み — R10 multi-line fleet rollup tests (ADR-2606082300).
   1:1 Clojure port of tests/test_fleet.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
@@ -7,7 +7,7 @@
             [itonami.methods.analyze :as analyze]
             [itonami.methods.fleet :as fleet]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (io/file "."))
 (def ^:private seed (io/file actor-dir "data" "seed-fleet-ops.kotoba.edn"))
 
 (defn- rollup []

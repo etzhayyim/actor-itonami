@@ -1,4 +1,4 @@
-(ns itonami.tests.test-ingest
+(ns itonami.tests.ingest-test
   "itonami 営み — R3 SCADA/OT scan-cycle ingest tests (ADR-2606082300).
   1:1 Clojure port of tests/test_ingest.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
@@ -7,7 +7,7 @@
             [itonami.methods.analyze :as analyze]
             [itonami.methods.ingest :as ingest]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (io/file "."))
 (def ^:private stream (io/file actor-dir "data" "seed-scancycle-stream.kotoba.edn"))
 (def ^:private ops (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 

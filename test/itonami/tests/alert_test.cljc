@@ -1,4 +1,4 @@
-(ns itonami.tests.test-alert
+(ns itonami.tests.alert-test
   "itonami 営み — R9 operational-alert tests (ADR-2606082300).
   1:1 Clojure port of tests/test_alert.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
@@ -7,7 +7,7 @@
             [itonami.methods.analyze :as analyze]
             [itonami.methods.alert :as alert]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (io/file "."))
 (def ^:private ops (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 
 (defn- eval-seed []

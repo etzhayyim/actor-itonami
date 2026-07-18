@@ -50,7 +50,7 @@
 
 #?(:clj
    (defn default-seed-path []
-     (str (io/file here-dir "data" "seed-factory-ops.kotoba.edn"))))
+     (str (io/file "data" "seed-factory-ops.kotoba.edn"))))
 
 #?(:clj
    (defn ground-datoms

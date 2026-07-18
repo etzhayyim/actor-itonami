@@ -1,23 +1,22 @@
-(ns itonami.methods.test-optimize
+(ns itonami.tests.optimize-test
   "itonami 営み — R1 optimization-proposal tests (ADR-2606082300).
-  1:1 Clojure port of tests/test_optimize.py (every assertion)."
+  1:1 Clojure port of tests/test_optimize.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
             [clojure.string :as str]
-            [clojure.java.io :as io]
+            #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.optimize :as optimize]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
-(def seed (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
+(def ^:private actor-dir (io/file "."))
+(def ^:private seed (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 
-(defn- load* []
+(defn- load-all []
   (let [{:keys [stations ticks]} (analyze/load-file* seed)]
     [stations ticks (analyze/analyze stations ticks)]))
 
 (deftest test-idle-powerdown-recovers-only-a-fraction-of-idle-energy
-  (let [[_ ticks res] (load*)
+  (let [[_ ticks res] (load-all)
         e (optimize/idle-powerdown res)
-        ;; total idle energy across the line, recomputed independently from ticks
         total-idle (reduce + 0.0 (map #(double (get % ":tick/kwh"))
                                       (filter #(not= (get % ":tick/state") analyze/RUN) ticks)))]
     (is (< (Math/abs (- (get e "recoverable_kwh") (* total-idle optimize/RECOVERABLE-IDLE-FRACTION))) 1e-9))
@@ -25,16 +24,13 @@
     (is (and (< 0.0 (get e "energy_reduction_frac")) (< (get e "energy_reduction_frac") 1.0)))))
 
 (deftest test-energy-reduction-is-honest-not-inflated
-  ;; G5: our synthetic line has modest idle waste — the % must NOT be silently set to 10%.
-  (let [[_ _ res] (load*)
+  (let [[_ _ res] (load-all)
         e (optimize/idle-powerdown res)]
-    ;; paint(45) + frame-weld down(8) = 53 idle kWh ; line = 825 kWh ; ×0.7 = 37.1 → ~4.5%
-    (is (and (< 0.03 (get e "energy_reduction_frac")) (< (get e "energy_reduction_frac") 0.06))
-        (str (get e "energy_reduction_frac")))
+    (is (and (< 0.03 (get e "energy_reduction_frac")) (< (get e "energy_reduction_frac") 0.06)))
     (is (= ":st.paint" (get e "top_station")))))
 
 (deftest test-bottleneck-relief-lifts-line-to-second-worst
-  (let [[_ _ res] (load*)
+  (let [[_ _ res] (load-all)
         b (optimize/bottleneck-relief res)
         sids (filter #(not (str/starts-with? % "_")) (keys res))
         oees (sort (map #(get-in res [% "oee"]) sids))]
@@ -44,8 +40,7 @@
     (is (> (get b "oee_uplift_frac") 0))))
 
 (deftest test-relief-levers-never-propose-sub-takt-speedup
-  ;; G2: relief is availability/performance recovery within takt, never speed-up.
-  (let [[_ _ res] (load*)
+  (let [[_ _ res] (load-all)
         b (optimize/bottleneck-relief res)
         text (str/lower-case (str/join " " (get b "relief_levers")))]
     (is (str/includes? text "within takt"))
@@ -53,7 +48,7 @@
       (is (not (str/includes? text forbidden))))))
 
 (deftest test-emit-proposals-all-transient
-  (let [[stations ticks res] (load*)
+  (let [[stations ticks res] (load-all)
         opt (optimize/optimize stations ticks res)
         out (optimize/emit-proposals opt 4)]
     (is (str/includes? out ":ops/proposal-energy-reduction-frac"))
@@ -61,16 +56,11 @@
     (doseq [line (str/split-lines out)]
       (when (and (str/starts-with? line "[") (str/includes? line ":ops/proposal"))
         (is (and (str/includes? line ":derived]") (str/includes? line ":bond/is-transient true")) line)))
-    ;; proposals are NEVER emitted as durable :add facts
     (is (not (str/includes? out ":add]")))))
 
 (deftest test-determinism
-  (let [[stations ticks res] (load*)
+  (let [[stations ticks res] (load-all)
         a (optimize/emit-proposals (optimize/optimize stations ticks res) 1)
-        [s2 t2 r2] (load*)
+        [s2 t2 r2] (load-all)
         b (optimize/emit-proposals (optimize/optimize s2 t2 r2) 1)]
     (is (= a b))))
-
-(defn -main [& _]
-  (let [{:keys [fail error]} (run-tests 'itonami.methods.test-optimize)]
-    (System/exit (if (pos? (+ fail error)) 1 0))))

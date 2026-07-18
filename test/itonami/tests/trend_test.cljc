@@ -1,4 +1,4 @@
-(ns itonami.tests.test-trend
+(ns itonami.tests.trend-test
   "itonami 営み — R7 KPI trend / drift tests (ADR-2606082300).
   1:1 Clojure port of tests/test_trend.py (pytest → clojure.test).
   NOTE: the Python test_g2_rejects_worker_series writes a temp file then reads via load_history;
@@ -7,7 +7,7 @@
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.trend :as trend]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (io/file "."))
 (def ^:private hist (io/file actor-dir "data" "seed-ops-history.kotoba.edn"))
 
 (defn- trends [] (trend/analyze-trends (trend/load-history (slurp hist))))
