@@ -1,4 +1,4 @@
-{:did        "did:web:etzhayyim.github.io:com-etzhayyim-itonami"
+{:did        "did:web:etzhayyim.com:actor:itonami"
  :handle     "itonami.etzhayyim.com"
  :ipns-key   "itonami-actor"
  :graph-type "com.etzhayyim.itonami.graph"
