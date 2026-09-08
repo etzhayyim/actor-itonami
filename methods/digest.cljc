@@ -14,7 +14,7 @@
 
   House style: Python ':…' keyword strings stay strings; string-keyed data; pure fns;
   file I/O only at #?(:clj) edges. Reuses analyze/optimize/inspect/plan/trend siblings."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.optimize :as optimize]
             [itonami.methods.inspect :as vis]

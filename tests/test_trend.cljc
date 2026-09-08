@@ -3,7 +3,7 @@
   1:1 Clojure port of tests/test_trend.py (pytest → clojure.test).
   NOTE: the Python test_g2_rejects_worker_series writes a temp file then reads via load_history;
   ported here by feeding load-history the same bad EDN text directly (text-arg port)."
-  (:require [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.lang.text] [clojure.test :refer [deftest is run-tests]]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.trend :as trend]))
 
@@ -52,13 +52,13 @@
 (deftest test-emit-transient-only
   (let [t (trends)
         out (trend/emit t 3)]
-    (is (clojure.string/includes? out ":trend/oee-direction"))
-    (is (clojure.string/includes? out ":trend/scrap-rate-regression true"))
-    (doseq [line (clojure.string/split-lines out)]
-      (when (and (clojure.string/starts-with? line "[") (clojure.string/includes? line ":trend/"))
-        (is (and (clojure.string/includes? line ":derived]")
-                 (clojure.string/includes? line ":bond/is-transient true")) line)))
-    (is (not (clojure.string/includes? out ":add]")))))
+    (is (kotoba.lang.text/includes? out ":trend/oee-direction"))
+    (is (kotoba.lang.text/includes? out ":trend/scrap-rate-regression true"))
+    (doseq [line (kotoba.lang.text/split-lines out)]
+      (when (and (kotoba.lang.text/starts-with? line "[") (kotoba.lang.text/includes? line ":trend/"))
+        (is (and (kotoba.lang.text/includes? line ":derived]")
+                 (kotoba.lang.text/includes? line ":bond/is-transient true")) line)))
+    (is (not (kotoba.lang.text/includes? out ":add]")))))
 
 (deftest test-determinism
   (is (= (trend/emit (trends) 1) (trend/emit (trends) 1))))

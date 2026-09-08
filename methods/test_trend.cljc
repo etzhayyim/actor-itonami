@@ -4,7 +4,7 @@
   (I/O at the #?(:clj) edge), so the G2 worker-series rejection is exercised on text directly
   rather than via a temp file."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.trend :as trend]))
 

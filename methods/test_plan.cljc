@@ -1,7 +1,7 @@
 (ns itonami.methods.test-plan
   "itonami 営み — R5 throughput / line-balance plan tests (ADR-2606082300).
   1:1 Clojure port of tests/test_plan.py (every assertion)."
-  (:require [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.lang.text] [clojure.test :refer [deftest is run-tests]]
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.plan :as P]))
@@ -55,22 +55,22 @@
   ;; G2: the lever must be availability recovery within takt, never a sub-takt speed-up.
   (let [[stations res] (load*)
         relief (P/relief-plan stations res)
-        lever (clojure.string/lower-case (get relief "lever"))]
-    (is (and (clojure.string/includes? lever "within takt") (clojure.string/includes? lever "availability")))
+        lever (kotoba.lang.text/lower (get relief "lever"))]
+    (is (and (kotoba.lang.text/includes? lever "within takt") (kotoba.lang.text/includes? lever "availability")))
     (doseq [forbidden ["speed-up" "speedup" "below takt" "faster than takt" "worker"]]
-      (is (not (clojure.string/includes? lever forbidden))))))
+      (is (not (kotoba.lang.text/includes? lever forbidden))))))
 
 (deftest test-emit-transient-only
   (let [[stations res] (load*)
         plan (P/line-plan stations res)
         relief (P/relief-plan stations res plan)
         out (P/emit plan relief 6)]
-    (is (and (clojure.string/includes? out ":ops/throughput-bottleneck")
-             (clojure.string/includes? out ":ops/units-per-day-good")))
-    (doseq [line (clojure.string/split-lines out)]
-      (when (and (clojure.string/starts-with? line "[") (clojure.string/includes? line ":ops/"))
-        (is (and (clojure.string/includes? line ":derived]") (clojure.string/includes? line ":bond/is-transient true")) line)))
-    (is (not (clojure.string/includes? out ":add]")))))
+    (is (and (kotoba.lang.text/includes? out ":ops/throughput-bottleneck")
+             (kotoba.lang.text/includes? out ":ops/units-per-day-good")))
+    (doseq [line (kotoba.lang.text/split-lines out)]
+      (when (and (kotoba.lang.text/starts-with? line "[") (kotoba.lang.text/includes? line ":ops/"))
+        (is (and (kotoba.lang.text/includes? line ":derived]") (kotoba.lang.text/includes? line ":bond/is-transient true")) line)))
+    (is (not (kotoba.lang.text/includes? out ":add]")))))
 
 (deftest test-determinism
   (let [[stations res] (load*)

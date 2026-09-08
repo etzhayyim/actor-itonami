@@ -18,7 +18,7 @@
     G3 — non-adjudicating. Detection classes/verdicts are DISCLOSED detector outputs.
 
   defaultdict insertion order → ::order pattern. Requires the merged itonami.methods.analyze ns."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             #?(:clj [clojure.java.io :as io])))
 

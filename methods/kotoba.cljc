@@ -22,7 +22,7 @@
   No-server-key: this writer holds no key and performs NO network I/O — it only
   appends to a local file. G1: routed findings go to a human/Council, NEVER a write-back
   to the line; this ledger records OBSERVATIONS (stations + scan-cycle ticks), not control."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])))
 
 (defn add [entity attr value] [":db/add" entity attr value])

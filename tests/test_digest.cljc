@@ -2,7 +2,7 @@
   "itonami 営み — R4 daily digest + Murakumo narration tests (ADR-2606082300).
   1:1 Clojure port of tests/test_digest.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.inspect :as vis]
@@ -44,7 +44,7 @@
 (deftest test-narration-carries-no-worker-dimension
   (let [d (build)]
     (doseq [text [(digest/narration-prompt d) (digest/fallback-narration d)]]
-      (let [low (str/lower-case text)]
+      (let [low (str/lower text)]
         (doseq [forbidden ["worker" "operator" "person" "employee" "staff"]]
           (is (not (str/includes? low forbidden)) (str "narration leaked " forbidden)))))))
 
@@ -52,7 +52,7 @@
   (let [d (build)]
     (is (= "murakumo" digest/NARRATION-BACKEND))
     (is (str/includes? digest/MURAKUMO-GATEWAY "127.0.0.1"))
-    (let [blob (str/lower-case (str (digest/narration-prompt d) digest/MURAKUMO-GATEWAY))]
+    (let [blob (str/lower (str (digest/narration-prompt d) digest/MURAKUMO-GATEWAY))]
       (doseq [forbidden ["openai" "anthropic" "vertex" "runpod" "bedrock" "api.openai"]]
         (is (not (str/includes? blob forbidden)))))))
 
@@ -101,13 +101,13 @@
         f (digest/facts d)]
     (is (nil? (get d "drift")))
     (is (and (= 0 (get f "drift_n")) (nil? (get f "drift_top"))))
-    (is (not (str/includes? (str/lower-case (digest/fallback-narration d)) "drift")))))
+    (is (not (str/includes? (str/lower (digest/fallback-narration d)) "drift")))))
 
 (deftest test-digest-with-history-surfaces-drift
   (let [d (build-with-history)]
     (is (and (some? (get d "drift")) (>= (get-in d ["drift" "n"]) 1)))
     (is (= ":st.cab-weld" (get-in d ["drift" "top" "scope"])))
-    (is (str/includes? (str/lower-case (digest/fallback-narration d)) "drift"))
+    (is (str/includes? (str/lower (digest/fallback-narration d)) "drift"))
     (is (str/includes? (digest/emit d (digest/narrate d)) ":ops/digest-drift-count"))))
 
 (deftest test-emit-transient-only

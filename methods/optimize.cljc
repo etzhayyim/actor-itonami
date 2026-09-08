@@ -18,7 +18,7 @@
 
   House style: Python ':…' keyword strings stay strings; pure fns; I/O at #?(:clj) edges.
   Float/percent formatting EXACT (HALF_EVEN over the exact double via BigDecimal; fmt-g for {v:g})."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             #?(:clj [clojure.java.io :as io])))
 

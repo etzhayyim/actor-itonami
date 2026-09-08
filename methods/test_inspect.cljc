@@ -2,7 +2,7 @@
   "itonami 営み — R2 vision-inspection hand-off tests (ADR-2606082300).
   1:1 Clojure port of tests/test_inspect.py (every assertion)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.inspect :as vis]))
@@ -38,7 +38,7 @@
 (deftest test-request-constraints-enforce-manako-invariants
   (let [[stations res det] (load*)
         req (vis/inspection-request stations res det)
-        joined (str/lower-case (str/join " " (get req "constraints")))]
+        joined (str/lower (str/join " " (get req "constraints")))]
     (is (or (str/includes? joined "no biometric") (str/includes? joined "no person")))
     (is (str/includes? joined "on-device"))
     (is (str/includes? joined "no auto-reject"))))   ; G1 — advisory, never actuates

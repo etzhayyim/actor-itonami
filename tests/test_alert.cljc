@@ -2,7 +2,7 @@
   "itonami 営み — R9 operational-alert tests (ADR-2606082300).
   1:1 Clojure port of tests/test_alert.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.alert :as alert]))
@@ -53,7 +53,7 @@
 
 (deftest test-no-actuation-token-anywhere
   (let [[_ alerts] (eval-seed)
-        blob (str/lower-case (str (alert/report-md alerts) (alert/emit alerts)))]
+        blob (str/lower (str (alert/report-md alerts) (alert/emit alerts)))]
     (doseq [forbidden ["e-stop" "estop" "halt" "trip" "shutdown" "actuat" ":write"]]
       (is (not (str/includes? blob forbidden))
           (str "alert output leaked an actuation token: " forbidden)))))

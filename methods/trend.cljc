@@ -18,7 +18,7 @@
 
   Requires the merged itonami.methods.analyze ns. House style: ':…' strings literal; pure fns;
   I/O at #?(:clj) edges; float formatting EXACT (HALF_EVEN over the exact double; fmt-g for {v:g})."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             #?(:clj [clojure.java.io :as io])))
 

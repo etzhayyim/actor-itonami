@@ -19,7 +19,7 @@
   The G2 no-worker assertion is still ported over the stations + ticks (the parts that do not
   need datom_emit). All PURE analyze assertions are ported 1:1."
   (:require [clojure.test :refer [deftest is testing run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]))
 

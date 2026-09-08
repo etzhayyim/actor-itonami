@@ -2,7 +2,7 @@
   "itonami 営み — R5 throughput / line-balance plan tests (ADR-2606082300).
   1:1 Clojure port of tests/test_plan.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.plan :as P]))
@@ -51,7 +51,7 @@
 (deftest test-relief-lever-is-availability-within-takt-not-speedup
   (let [[stations res] (load-all)
         relief (P/relief-plan stations res)
-        lever (str/lower-case (get relief "lever"))]
+        lever (str/lower (get relief "lever"))]
     (is (and (str/includes? lever "within takt") (str/includes? lever "availability")))
     (doseq [forbidden ["speed-up" "speedup" "below takt" "faster than takt" "worker"]]
       (is (not (str/includes? lever forbidden))))))
