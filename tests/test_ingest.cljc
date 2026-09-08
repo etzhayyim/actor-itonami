@@ -2,7 +2,7 @@
   "itonami 営み — R3 SCADA/OT scan-cycle ingest tests (ADR-2606082300).
   1:1 Clojure port of tests/test_ingest.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.ingest :as ingest]))

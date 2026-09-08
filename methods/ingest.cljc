@@ -16,7 +16,7 @@
 
   House style: Python ':…' keyword strings stay strings; string-keyed data; pure fns;
   file I/O only at #?(:clj) edges. Reuses itonami.methods.analyze (read-edn)."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             #?(:clj [clojure.java.io :as io])))
 

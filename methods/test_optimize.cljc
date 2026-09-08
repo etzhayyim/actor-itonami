@@ -2,7 +2,7 @@
   "itonami 営み — R1 optimization-proposal tests (ADR-2606082300).
   1:1 Clojure port of tests/test_optimize.py (every assertion)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.optimize :as optimize]))
@@ -47,7 +47,7 @@
   ;; G2: relief is availability/performance recovery within takt, never speed-up.
   (let [[_ _ res] (load*)
         b (optimize/bottleneck-relief res)
-        text (str/lower-case (str/join " " (get b "relief_levers")))]
+        text (str/lower (str/join " " (get b "relief_levers")))]
     (is (str/includes? text "within takt"))
     (doseq [forbidden ["speed-up" "speedup" "faster than takt" "below takt" "worker"]]
       (is (not (str/includes? text forbidden))))))

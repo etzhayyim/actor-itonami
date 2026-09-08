@@ -2,7 +2,7 @@
   "itonami 営み — R1 optimization-proposal tests (ADR-2606082300).
   1:1 Clojure port of tests/test_optimize.py (pytest → clojure.test)."
   (:require [clojure.test :refer [deftest is run-tests]]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.optimize :as optimize]))
@@ -42,7 +42,7 @@
 (deftest test-relief-levers-never-propose-sub-takt-speedup
   (let [[_ _ res] (load-all)
         b (optimize/bottleneck-relief res)
-        text (str/lower-case (str/join " " (get b "relief_levers")))]
+        text (str/lower (str/join " " (get b "relief_levers")))]
     (is (str/includes? text "within takt"))
     (doseq [forbidden ["speed-up" "speedup" "faster than takt" "below takt" "worker"]]
       (is (not (str/includes? text forbidden))))))

@@ -15,7 +15,7 @@
   IDEMPOTENT-BY-CONTENT: a beat whose ground datoms equal the previous beat's is a NO-OP.
   No-server-key: appends to a local file only, no network I/O. G1: observations only, never a
   line write-back."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.datom-emit :as de]
             [itonami.methods.kotoba :as k]

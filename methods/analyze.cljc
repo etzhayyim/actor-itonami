@@ -34,7 +34,7 @@
   Insertion-ordered accumulators carry ::order metadata so a stable sort-by ties the Python
   defaultdict iteration order. itonami iterates only dicts/lists (no order-sensitive set(...)),
   so plain ::order suffices — no siphash13/setobject port is needed."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ── minimal EDN reader (subset: vectors [], maps {}, :keyword, "string", num, bool, nil)
 ;; Mirrors analyze.py's _TOK / _tokens / _atom / _parse faithfully. Keywords are kept as

@@ -19,7 +19,7 @@
   `sorted(s for s in res if not s.startswith('_'))`; the routed-findings block walks the
   `_recommend` map in insertion order (bottleneck, energy_target, idle_energy_target,
   quality_target)."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             #?(:clj [clojure.java.io :as io])))
 
