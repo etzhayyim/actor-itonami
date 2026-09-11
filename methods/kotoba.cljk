@@ -1,4 +1,4 @@
-#!/usr/bin/env bb
+#!/usr/bin/env kbb
 ;; itonami 営み — factory-ops scan-cycle DATOM-LOG writer (content-addressed commit-DAG).
 (ns itonami.methods.kotoba
   "kotoba.cljc — itonami 営み append-only FACTORY-OPS LEDGER writer

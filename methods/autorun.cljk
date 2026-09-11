@@ -1,4 +1,4 @@
-#!/usr/bin/env bb
+#!/usr/bin/env kbb
 ;; itonami 営み — autonomous heartbeat: load the factory-ops log → append GROUND datoms.
 (ns itonami.methods.autorun
   "autorun.cljc — itonami 営み deterministic heartbeat (ADR-2606082300, inochi/tate pattern).
