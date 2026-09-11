@@ -1,6 +1,6 @@
-#!/usr/bin/env bb
+#!/usr/bin/env kbb
 ;; itonami 営み — factory-ops-ledger persistence + heartbeat tests.
-;; Run:  bb --classpath 20-actors 20-actors/itonami/tests/test_kotoba.cljk
+;; Run:  kbb --classpath 20-actors 20-actors/itonami/tests/test_kotoba.cljk
 (ns itonami.tests.test-kotoba
   (:require [itonami.methods.kotoba :as k]
             [itonami.methods.autorun :as auto]
