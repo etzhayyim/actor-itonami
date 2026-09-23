@@ -3,7 +3,7 @@
   1:1 Clojure port of tests/test_trend.py (pytest → clojure.test).
   NOTE: the Python test_g2_rejects_worker_series writes a temp file then reads via load_history;
   ported here by feeding load-history the same bad EDN text directly (text-arg port)."
-  (:require [kotoba.lang.text] [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.lang.text] [kotoba.test :refer [deftest is run-tests]]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.trend :as trend]))
 

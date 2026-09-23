@@ -1,7 +1,7 @@
 (ns itonami.tests.test-digest
   "itonami 営み — R4 daily digest + Murakumo narration tests (ADR-2606082300).
   1:1 Clojure port of tests/test_digest.py (pytest → clojure.test)."
-  (:require [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.test :refer [deftest is run-tests]]
             [kotoba.lang.text :as str]
             #?(:clj [clojure.java.io :as io])
             [itonami.methods.analyze :as analyze]

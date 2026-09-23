@@ -9,7 +9,7 @@
     - the Datom log emits ground :add datoms (incl. scan-cycle ticks) + derived OEE, and
       flags every :ops/* KPI line :derived / :bond/is-transient (G3 — not a fact)
     - emit is deterministic (repeat-emit on a re-loaded seed is byte-identical)"
-  (:require [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.test :refer [deftest is run-tests]]
             [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.analyze :as analyze]

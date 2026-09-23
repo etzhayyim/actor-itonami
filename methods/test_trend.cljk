@@ -3,7 +3,7 @@
   1:1 Clojure port of tests/test_trend.py (every assertion). load-history takes EDN text
   (I/O at the #?(:clj) edge), so the G2 worker-series rejection is exercised on text directly
   rather than via a temp file."
-  (:require [clojure.test :refer [deftest is run-tests]]
+  (:require [kotoba.test :refer [deftest is run-tests]]
             [kotoba.lang.text :as str]
             [clojure.java.io :as io]
             [itonami.methods.trend :as trend]))
