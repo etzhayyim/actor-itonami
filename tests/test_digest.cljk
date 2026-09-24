@@ -3,13 +3,13 @@
   1:1 Clojure port of tests/test_digest.py (pytest → clojure.test)."
   (:require [kotoba.test :refer [deftest is run-tests]]
             [kotoba.lang.text :as str]
-            #?(:clj [clojure.java.io :as io])
+            #?(:clj [kotoba.io :as io])
             [itonami.methods.analyze :as analyze]
             [itonami.methods.inspect :as vis]
             [itonami.methods.trend :as trend]
             [itonami.methods.digest :as digest]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (-> *file* io/file io/parent-file io/parent-file))
 (def ^:private ops (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 (def ^:private det (io/file actor-dir "data" "seed-vision-detections.kotoba.edn"))
 

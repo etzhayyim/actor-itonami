@@ -5,10 +5,10 @@
   rather than via a temp file."
   (:require [kotoba.test :refer [deftest is run-tests]]
             [kotoba.lang.text :as str]
-            [clojure.java.io :as io]
+            [kotoba.io :as io]
             [itonami.methods.trend :as trend]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def actor-dir (-> *file* io/file io/parent-file io/parent-file))
 (def hist (io/file actor-dir "data" "seed-ops-history.kotoba.edn"))
 
 (defn- load-history [] (trend/load-history (slurp hist)))

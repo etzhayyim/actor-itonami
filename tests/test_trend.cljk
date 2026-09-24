@@ -4,10 +4,10 @@
   NOTE: the Python test_g2_rejects_worker_series writes a temp file then reads via load_history;
   ported here by feeding load-history the same bad EDN text directly (text-arg port)."
   (:require [kotoba.lang.text] [kotoba.test :refer [deftest is run-tests]]
-            #?(:clj [clojure.java.io :as io])
+            #?(:clj [kotoba.io :as io])
             [itonami.methods.trend :as trend]))
 
-(def ^:private actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def ^:private actor-dir (-> *file* io/file io/parent-file io/parent-file))
 (def ^:private hist (io/file actor-dir "data" "seed-ops-history.kotoba.edn"))
 
 (defn- trends [] (trend/analyze-trends (trend/load-history (slurp hist))))
