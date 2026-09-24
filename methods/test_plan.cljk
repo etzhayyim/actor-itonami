@@ -2,11 +2,11 @@
   "itonami 営み — R5 throughput / line-balance plan tests (ADR-2606082300).
   1:1 Clojure port of tests/test_plan.py (every assertion)."
   (:require [kotoba.lang.text] [kotoba.test :refer [deftest is run-tests]]
-            [clojure.java.io :as io]
+            [kotoba.io :as io]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.plan :as P]))
 
-(def actor-dir (-> *file* io/file .getParentFile .getParentFile))
+(def actor-dir (-> *file* io/file io/parent-file io/parent-file))
 (def ops (io/file actor-dir "data" "seed-factory-ops.kotoba.edn"))
 
 (defn- load* []
