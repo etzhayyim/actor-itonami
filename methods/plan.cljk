@@ -21,7 +21,7 @@
   I/O at #?(:clj) edges; float formatting EXACT (HALF_EVEN over the exact double; fmt-g for {v:g})."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 ;; Documented operating-hours assumption (G5): 2 shifts. NOT a measured fact.
 (def OPERATING-HOURS-PER-DAY 16.0)
@@ -193,7 +193,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -208,7 +208,7 @@
            res (analyze/analyze stations ticks)
            plan (line-plan stations res hours)
            relief (relief-plan stations res plan hours)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "throughput-plan.md") (report-md stations res plan relief))
        (spit (io/file outdir "itonami-plan.kotoba.edn") (emit plan relief tx))
        (println (str "itonami R5: throughput bottleneck " (get plan "throughput_bottleneck") " · "

@@ -18,7 +18,7 @@
   file I/O only at #?(:clj) edges. Reuses itonami.methods.analyze (read-edn)."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 (def ^:private state-severity {":run" 0 ":idle" 1 ":down" 2})
 (def ^:private forbidden-attr-prefixes [":worker" ":person" ":operator" ":face" ":biometric"])
@@ -155,7 +155,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            stream (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                     (io/file (first argv))
                     (io/file here "data" "seed-scancycle-stream.kotoba.edn"))
@@ -164,6 +164,6 @@
                     (io/file here "out"))
            datoms (parse-scan-datoms (slurp stream))
            ticks (fold-to-ticks datoms)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "ingested-ticks.kotoba.edn") (to-tick-edn ticks))
        0)))

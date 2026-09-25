@@ -16,7 +16,7 @@
   file I/O only at #?(:clj) edges. Reuses itonami.methods.analyze."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 ;; Documented thresholds (G5 — :representative config, caller-overridable; NOT measured facts).
 ;; polarity true = higher-better (alert when BELOW); false = lower-better (alert when ABOVE).
@@ -130,7 +130,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -141,7 +141,7 @@
            {:keys [stations ticks]} (analyze/load-file* seed)
            res (analyze/analyze stations ticks)
            alerts (evaluate stations res)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "alerts.md") (report-md alerts))
        (spit (io/file outdir "itonami-alerts.kotoba.edn") (emit alerts tx))
        0)))

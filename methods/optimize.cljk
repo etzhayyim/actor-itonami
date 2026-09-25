@@ -20,7 +20,7 @@
   Float/percent formatting EXACT (HALF_EVEN over the exact double via BigDecimal; fmt-g for {v:g})."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 ;; Conservative share of non-producing energy that is actually recoverable by power-down.
 ;; Representative + documented (G5).
@@ -168,7 +168,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -181,7 +181,7 @@
            opt (optimize stations ticks)
            e (get opt "idle_powerdown")
            b (get opt "bottleneck_relief")]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "optimization-proposals.md") (report-md stations opt))
        (spit (io/file outdir "itonami-proposals.kotoba.edn") (emit-proposals opt tx))
        (println (str "itonami R1: energy -" (fmt-pct (get e "energy_reduction_frac"))

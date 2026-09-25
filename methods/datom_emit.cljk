@@ -21,7 +21,7 @@
   quality_target)."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 (def station-attrs
   [":station/label" ":station/line" ":station/takt-s"
@@ -133,7 +133,7 @@
      "CLI entry: analyze a seed EDN ops log → out/itonami-datoms.kotoba.edn (file I/O at the edge)."
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -146,7 +146,7 @@
            {:keys [stations ticks]} (analyze/load-file* seed)
            res (analyze/analyze stations ticks)
            out (io/file outdir "itonami-datoms.kotoba.edn")]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit out (emit stations ticks res tx))
        (println (str "itonami datom log → " out " (" (count stations) " stations + " (count ticks)
                      " ticks, tx=" tx ")"))
