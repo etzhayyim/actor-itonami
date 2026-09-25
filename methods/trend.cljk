@@ -20,7 +20,7 @@
   I/O at #?(:clj) edges; float formatting EXACT (HALF_EVEN over the exact double; fmt-g for {v:g})."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 ;; KPI polarity: true = higher is better, false = lower is better. ORDER matters (dict-iteration).
 (def KPI-POLARITY-ORDER [":opsday/oee" ":opsday/scrap-rate" ":opsday/energy-per-good"])
@@ -193,7 +193,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-ops-history.kotoba.edn"))
@@ -205,7 +205,7 @@
            records (load-history (slurp seed))
            trends (analyze-trends records)
            regs (regressions trends)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "trend-report.md") (report-md trends))
        (spit (io/file outdir "itonami-trends.kotoba.edn") (emit trends tx))
        (println (str "itonami R7: " (count records) " snapshots, " (count (scope-order trends))

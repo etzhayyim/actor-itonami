@@ -20,7 +20,7 @@
             [itonami.methods.inspect :as vis]
             [itonami.methods.plan :as P]
             [itonami.methods.trend :as T]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 ;; Narration routes ONLY through the Murakumo fleet (ADR-2605215000). Fixed by construction.
 (def NARRATION-BACKEND "murakumo")
@@ -213,7 +213,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -229,10 +229,10 @@
            tx (if (some #{"--tx"} argv) (Long/parseLong (nth argv (inc (.indexOf argv "--tx")))) 1)
            {:keys [stations ticks]} (analyze/load-file* seed)
            detections (vis/load-detections (slurp det-path))
-           history (when (.exists hist-path) (T/load-history (slurp hist-path)))
+           history (when (io/exists? hist-path) (T/load-history (slurp hist-path)))
            d (build-digest stations ticks detections history)
            narration (narrate d)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "daily-digest.md") (report-md d narration))
        (spit (io/file outdir "itonami-digest.kotoba.edn") (emit d narration tx))
        0)))

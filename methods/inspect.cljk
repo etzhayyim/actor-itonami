@@ -20,7 +20,7 @@
   defaultdict insertion order → ::order pattern. Requires the merged itonami.methods.analyze ns."
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 (def PASS ":pass")
 (def REWORK ":rework")
@@ -198,7 +198,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-factory-ops.kotoba.edn"))
@@ -215,7 +215,7 @@
            detections (load-detections (slurp det-path))
            req (inspection-request stations res detections)
            rec (reconcile detections res)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "vision-inspection.md") (report-md stations req rec))
        (spit (io/file outdir "itonami-inspect.kotoba.edn") (emit req rec tx))
        (println (str "itonami R2: inspect " (get req "station") " (sample " (fmt-pct0 (get req "sample_rate"))

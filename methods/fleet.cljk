@@ -17,7 +17,7 @@
   (:require [kotoba.lang.text :as str]
             [itonami.methods.analyze :as analyze]
             [itonami.methods.alert :as alert]
-            #?(:clj [clojure.java.io :as io])))
+            #?(:clj [kotoba.io :as io])))
 
 (defn split-lines
   "Group (stations, ticks) into {line_id (line_stations line_ticks)}.
@@ -127,7 +127,7 @@
    (defn -main
      [& argv]
      (let [argv (vec argv)
-           here (-> *file* io/file .getParentFile .getParentFile)
+           here (-> *file* io/file io/parent-file io/parent-file)
            seed (if (and (seq argv) (not (str/starts-with? (first argv) "--")))
                   (io/file (first argv))
                   (io/file here "data" "seed-fleet-ops.kotoba.edn"))
@@ -137,7 +137,7 @@
            tx (if (some #{"--tx"} argv) (Long/parseLong (nth argv (inc (.indexOf argv "--tx")))) 1)
            {:keys [stations ticks]} (analyze/load-file* seed)
            fleet (rollup stations ticks)]
-       (.mkdirs outdir)
+       (io/mkdirs outdir)
        (spit (io/file outdir "fleet-rollup.md") (report-md fleet))
        (spit (io/file outdir "itonami-fleet.kotoba.edn") (emit fleet tx))
        0)))
